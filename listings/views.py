@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from multiprocessing import context
+from django.shortcuts import redirect, render
 from .models import Listing
+from .forms import ListingForm
 
 # Create your views here.
 def listing_listings(request):
@@ -16,4 +18,39 @@ def listing_listing(request,id):
     }
     return render(request,'listing.html',context)
 
+def listing_create(request):
+    form = ListingForm()
+    if request.method == "POST":
+        form = ListingForm(request.POST,request.FILES)
+        if form.is_valid:
+            form.save()
+        return redirect('/')
+
+    context = {
+        "form":form,
+
+    }
+
+    return render(request,'create.html',context)
+
+def listing_update(request,id):
+    listing = Listing.objects.get(id=id)
+    form = ListingForm(instance = listing)
+    if request.method == "POST":
+        form = ListingForm(request.POST, instance = listing, files=request.FILES)
+        if form.is_valid:
+            form.save()
+        return redirect('/')
+
+    context = {
+        "form":form,
+
+    }
+
+    return render(request,'update.html',context)
+
+def listing_delete(request,id):
+     listing = Listing.objects.get(id=id)
+     listing.delete()
+     return redirect('/')
 

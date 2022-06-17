@@ -1,5 +1,6 @@
 from turtle import title
 from django.db import models
+from django.forms import ImageField
 
 # Create your models here.
 class Listing(models.Model):
@@ -9,7 +10,7 @@ class Listing(models.Model):
     num_beds = models.IntegerField()
     square_foot = models.IntegerField()
     address = models.CharField(max_length=200)
-    #image
+    image = models.ImageField()
 
 
     def __str__(self):
